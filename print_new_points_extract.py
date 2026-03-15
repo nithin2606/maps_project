@@ -2,8 +2,6 @@ import folium
 from destinations import extract_places
 
 
-
-
 def plot_points(places, output_html="map.html"):
 
 

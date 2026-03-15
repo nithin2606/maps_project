@@ -41,20 +41,28 @@ max_freq = max(freq.values())
 
 # print(max_freq)
 
-def freq_to_size(count, max_count, min_size=1, max_size=15):
-    return min_size + (max_size - min_size) * (count / max_count)
-
+def freq_to_bar(lat, lng, count, max_count, max_height=100):
+    height = max(3, int(max_height * (count / max_count)))
+    bar_html = f"""
+        <div style="
+            width: 4px;
+            height: {height}px;
+            background: #3388ff;
+            opacity: 0.7;
+            border-radius: 2px 2px 0 0;
+        "></div>
+    """
+    return folium.Marker(
+        location=[lat, lng],
+        icon=folium.DivIcon(
+            html=bar_html,
+            icon_size=(4, height),
+            icon_anchor=(2, height),
+        )
+    )
 
 for p in places:
-
     count = freq.get((p["lat"], p["lng"]), 1)
-    size = freq_to_size(count, max_freq)
-    folium.CircleMarker(
-        location=[p["lat"], p["lng"]],
-        radius=size,
-        color="#3388ff",
-        fill=True,
-        fill_opacity=0.3,
-    ).add_to(m)
+    freq_to_bar(p["lat"], p["lng"], count, max_freq).add_to(m)
 
 st_folium(m, use_container_width=True, height=750)
