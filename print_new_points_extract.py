@@ -21,4 +21,4 @@ def plot_points(places, output_html="map.html"):
     m.save(output_html)
     print(f"✅ {len(places)} places plotted → {output_html}")
 
-plot_points(extract_places("Timeline_15_03_26.json", output_file_path="points_output.json"), output_html="map.html")
+plot_points(extract_places("Timeline_15_03_26.json", output_file_path="points_output.json")[0], output_html="map.html")

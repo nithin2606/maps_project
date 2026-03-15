@@ -9,9 +9,9 @@ st.title("Google Timeline Destinations Map")
 
 @st.cache_data
 def load_places():
-    return extract_places("Timeline_15_03_26.json", output_file_path="points_output.json")
+    return extract_places("Timeline_15_03_26.json")
 
-places = load_places()
+places, dup_places = load_places()
 
 st.write(f"Total destinations extracted: {len(places)}")
 

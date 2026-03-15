@@ -5,6 +5,7 @@ def extract_places(json_file_path, output_file_path=None):
         data = json.load(f)
 
     places = []
+    dup_places = []
 
     # Handle both list (array) and dict wrapper
     entries = data if isinstance(data, list) else data.get("semanticSegments", data.get("timelineObjects", []))
@@ -22,17 +23,19 @@ def extract_places(json_file_path, output_file_path=None):
             if {"lat": float(lat), "lng": float(lng)} not in places:
                 places.append({"lat": float(lat), "lng": float(lng)})
 
+            dup_places.append({"lat": float(lat), "lng": float(lng)})
 
-    print(f"Total destinations extracted: {len(places)}")
-    for p in places[:5]:  # Preview first 5
-        print(p)
 
-    if output_file_path:
-        with open(output_file_path, 'w', encoding='utf-8') as f:
-            json.dump(places, f, indent=2)
-        print(f"\nSaved to {output_file_path}")
+    # print(f"Total destinations extracted: {len(places)}")
+    # for p in places[:5]:  # Preview first 5
+    #     print(p)
 
-    return places
+    # if output_file_path:
+    #     with open(output_file_path, 'w', encoding='utf-8') as f:
+    #         json.dump(places, f, indent=2)
+    #     print(f"\nSaved to {output_file_path}")
+
+    return places, dup_places
 
 
 places = extract_places("Timeline_15_03_26.json", output_file_path="destinations_output.json")
