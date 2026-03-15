@@ -1,5 +1,6 @@
 this is me, learning how to use json data
-Goal:
+
+Goals:
   1. get more familiar with Json
   2. get more familiar with working with python
   3. build different kinds of maps
