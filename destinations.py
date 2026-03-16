@@ -13,6 +13,7 @@ def extract_places(json_file_path, output_file_path=None):
     entries = data if isinstance(data, list) else data.get("semanticSegments", data.get("timelineObjects", []))
 
     for entry in entries:
+        year = entry.get("startTime", "")[:4]  # Extract year from startTime
         visit = entry.get("visit", {})
         top_candidate = visit.get("topCandidate", {})
         place_id = top_candidate.get("placeId", "")
@@ -23,15 +24,15 @@ def extract_places(json_file_path, output_file_path=None):
             lat = lat.rstrip('°')
             lng = lng.rstrip('°')
 
-            if {"lat": float(lat), "lng": float(lng)} not in places:
-                places.append({"lat": float(lat), "lng": float(lng)})
+            if {"lat": lat, "lng": lng} not in [{"lat": p["lat"], "lng": p["lng"]} for p in places]:
+                places.append({"lat": lat, "lng": lng, "year": year})
 
-            dup_places.append({"lat": float(lat), "lng": float(lng)})
+            dup_places.append({"lat": lat, "lng": lng, "year": year})
 
         if place_id:
-            dup_places_id.append(place_id)
+            dup_places_id.append({"place_id": place_id, "year": year})
             if place_id not in places_id:
-                places_id.append(place_id)
+                places_id.append({"place_id": place_id, "year": year})
 
 
 
@@ -46,5 +47,3 @@ def extract_places(json_file_path, output_file_path=None):
 
     return places, dup_places, places_id, dup_places_id
 
-
-places = extract_places("Timeline_15_03_26.json", output_file_path="destinations_output.json")
